@@ -7,7 +7,7 @@ function App() {
   const [users, setUsers] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:5000/users')
+    axios.get('https://still-atoll-62245.herokuapp.com/users')
               .then(res => {
                 setUsers(res.data);
               });
