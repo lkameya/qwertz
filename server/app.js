@@ -16,6 +16,10 @@ app.get('/categories', function (req, res) {
   res.send('Categories');
 });
 
+app.get('/products', function (req, res) {
+  res.send('Produtos');
+});
+
 app.listen(5000, function () {
   console.log('Example app listening on port 5000!');
 });
