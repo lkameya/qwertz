@@ -4,10 +4,25 @@ import './App.css';
 
 function App() {
 
-  const [users, setUsers] = useState('');
+  const [users, setUsers] = useState([]);
+  const [values, setValues] = useState({});
+
+  const handleChange = (e) => {
+    const newValues = {...values};
+    newValues[e.target.name] = e.target.value;
+    setValues(newValues);
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("Enviar os dados pro backend");
+    console.log(values);
+    await axios.post('http://localhost:5000/user', values);
+    setUsers([...users, values]);
+  }
 
   useEffect(() => {
-    axios.get('https://still-atoll-62245.herokuapp.com/users')
+    axios.get('http://localhost:5000/users')
               .then(res => {
                 setUsers(res.data);
               });
@@ -15,7 +30,15 @@ function App() {
 
   return (
     <div className="App">
-      <div>{users}</div>
+      <form onSubmit={handleSubmit}>
+        <input type="text" name="firstName" onChange={handleChange} />
+        <input type="text" name="lastName" onChange={handleChange} />
+        <input type="email" name="email" onChange={handleChange}/>
+        <button type="submit">Add User</button>
+      </form>
+      <div>
+        {users.map(user => (<div key={user.firstName}>{user.firstName}</div>))}
+      </div>
     </div>
   );
 }
