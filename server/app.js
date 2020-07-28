@@ -12,6 +12,8 @@ var sequelize = new Sequelize(config.development.database, config.development.us
   dialect: 'postgres',
 });
 
+// var sequelize = new Sequelize(config.production.use_env_variable);
+
 sequelize
   .authenticate()
   .then(function(err) {
@@ -32,8 +34,6 @@ var User = sequelize.define('User', {
       type: Sequelize.STRING
     }
   });
-
-
 
 app.use(cors());
 
