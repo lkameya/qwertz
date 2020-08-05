@@ -1,29 +1,36 @@
-import axios from 'axios';
+import { default as Axios } from 'axios';
 import { useFormik } from 'formik';
-import React from 'react';
-import * as Yup from 'yup';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import Button from '../Shared/Button';
 import { Container, Form } from './styles';
 
-function AddUsuario() {
+function DeleteUsuario() {
+  const { id } = useParams();
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    // GET user/id
+    Axios.get(`http://localhost:5000/user/${id}`)
+              .then(res => {
+                setUser(res.data);
+        });
+  }, [id]);
+
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      firstName: '',
-      lastName: '',
-      email: ''
+      id: user.id || '',
+      firstName: user.firstName || '',
+      lastName: user.lastName || '',
+      email: user.email || ''
     },
-    validationSchema: Yup.object({
-      firstName: Yup.string().required('Campo obrigatório').max(10, 'Nome deve ter no maximo 10 caracteres'),
-    }),
     onSubmit: async (values) => {
-      await axios.post('http://localhost:5000/user', values);
-      // await axios.post('https://dry-atoll-57308.herokuapp.com/user', values);
-      // setUsers([...users, values]);
+      await Axios.delete(`http://localhost:5000/user/${values.id}`, values);
     },
   });
 
-  // const [users, setUsers] = useState([]);
   // const [values, setValues] = useState({});
   // const [errors, setErrors] = useState('');
 
@@ -53,18 +60,17 @@ function AddUsuario() {
   return (
     <Container>
       <Form onSubmit={formik.handleSubmit}>
-        <input type="text" name="firstName" onChange={formik.handleChange}/>
+        <input type="text" name="firstName" onChange={formik.handleChange} value={formik.values.firstName} disabled/>
         {formik.touched.firstName && formik.errors.firstName ? (
                 <p>{formik.errors.firstName}</p>
             ) : null}
-        <input type="text" name="lastName" onChange={formik.handleChange} />
-        <input type="email" name="email" onChange={formik.handleChange}/>
-        <Button type="submit">Add User</Button>
+        <input type="text" name="lastName" onChange={formik.handleChange} value={formik.values.lastName} disabled/>
+        <input type="email" name="email" onChange={formik.handleChange} value={formik.values.email} disabled/>
+        <Button type="submit">Delete User</Button>
         {/* <div>{errors}</div> */}
       </Form>
-
     </Container>
   );
 }
 
-export default AddUsuario;
+export default DeleteUsuario;

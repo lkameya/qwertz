@@ -20,7 +20,7 @@ const ButtonSecondary = styled(StyledButton)`
 
 function Button(props) {
   return (
-    <StyledButton>{props.children}</StyledButton>
+    <StyledButton {...props}>{props.children}</StyledButton>
   );
 }
 

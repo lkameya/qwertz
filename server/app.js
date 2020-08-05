@@ -47,10 +47,39 @@ app.get('/users', function (req, res) {
   });
 });
 
+app.get('/user/:id', function (req, res) {
+  console.log(req.params.id);
+  User.findOne({
+    where: { id: req.params.id }
+  }).then(function(user) {
+    res.send(user);
+  });
+});
+
 app.post('/user', jsonParser, async function (req, res) {
   var user = User.build(req.body);
   await user.save();
   res.send("User insert success");
+});
+
+app.put('/user/:id', jsonParser, async function (req, res) {
+  User.update(
+    req.body,
+    {where: { id: req.params.id }
+  }).then(function(user) {
+    console.log(user);
+  });
+  res.send("User update success");
+});
+
+app.delete('/user/:id', jsonParser, async function (req, res) {
+  User.destroy(
+    {where: { id: req.params.id }
+  }).then(function(user) {
+    console.log(user);
+  });
+  
+  res.send("User delete success");
 });
 
 app.get('/categories', function (req, res) {
