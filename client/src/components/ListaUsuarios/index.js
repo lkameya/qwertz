@@ -1,7 +1,6 @@
 import Axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from 'reactstrap';
 import styled from 'styled-components';
 
 const Card = styled.div`
@@ -90,9 +89,9 @@ function ListaUsuarios() {
         ))}
 
       </Container>
-      <Button color="primary">
-        Cadastrar
-      </Button>
+      <Link to={{
+                pathname: `/add-usuario`,
+              }}>Cadastrar Usuario</Link>
    
     </Card>
   );
