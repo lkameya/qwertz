@@ -1,11 +1,17 @@
 import axios from 'axios';
 import { useFormik } from 'formik';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
+import { useNotification } from '../Notification/NotificationProvider';
 import Button from '../Shared/Button';
 import { Container, Form } from './styles';
 
 function AddUsuario() {
+
+  const { addNotification } = useNotification();
+
+  const history = useHistory();
 
   const formik = useFormik({
     initialValues: {
@@ -17,7 +23,15 @@ function AddUsuario() {
       firstName: Yup.string().required('Campo obrigatório').max(10, 'Nome deve ter no maximo 10 caracteres'),
     }),
     onSubmit: async (values) => {
-      await axios.post('http://localhost:5000/user', values);
+
+      try {
+        await axios.post('http://localhost:5000/user', values);
+        addNotification('Usuário inserido com sucesso', 'success');
+      } catch(error) {
+        addNotification('Erro ao inserir usuario', 'error');
+      }
+
+      history.push('/');
       // await axios.post('https://dry-atoll-57308.herokuapp.com/user', values);
       // setUsers([...users, values]);
     },
