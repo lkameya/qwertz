@@ -17,7 +17,8 @@ function AddUsuario() {
     initialValues: {
       firstName: '',
       lastName: '',
-      email: ''
+      email: '',
+      pwd: ''
     },
     validationSchema: Yup.object({
       firstName: Yup.string().required('Campo obrigatório').max(10, 'Nome deve ter no maximo 10 caracteres'),
@@ -73,6 +74,7 @@ function AddUsuario() {
             ) : null}
         <input type="text" name="lastName" onChange={formik.handleChange} />
         <input type="email" name="email" onChange={formik.handleChange}/>
+        <input type="password" name="pwd" onChange={formik.handleChange}/>
         <Button type="submit">Add User</Button>
         {/* <div>{errors}</div> */}
       </Form>

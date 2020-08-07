@@ -10,6 +10,7 @@ import DeleteUsuario from './components/DeleteUsuario';
 import EditUsuario from './components/EditUsuario';
 import Home from './components/Home';
 import ListaUsuarios from './components/ListaUsuarios';
+import Login from './components/Login';
 import NotificationProvider from './components/Notification/NotificationProvider';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
       <NotificationProvider>
         <Switch>
           <Route path="/" exact component={ListaUsuarios}/>
+          <Route path="/login" exact component={Login}/>
           <Route path="/home" exact component={Home}/>
           <Route path="/add-usuario" component={AddUsuario}/>
           <Route path="/edit-usuario/:id" component={EditUsuario}/>

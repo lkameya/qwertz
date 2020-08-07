@@ -57,11 +57,20 @@ function ListaUsuarios() {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    Axios.get('http://localhost:5000/users')
+    Axios.get('http://localhost:5000/users', {
+      headers: {"x-access-token" : `${localStorage.getItem("token")}`}
+    })
               .then(res => {
                 setUsers(res.data);
               });
   }, []);
+
+  const handleLogout = () => {
+    Axios.post('http://localhost:5000/logout')
+        .then(res => {
+          localStorage.setItem("token", null);
+    });
+  }
 
   return (
     <Card>
@@ -69,6 +78,7 @@ function ListaUsuarios() {
         <Header>
           <div>First Name</div>
           <div>Last Name</div>
+          <div>E-mail</div>
           <div>E-mail</div>
           <div>Actions</div>
         </Header>
@@ -92,7 +102,7 @@ function ListaUsuarios() {
       <Link to={{
                 pathname: `/add-usuario`,
               }}>Cadastrar Usuario</Link>
-   
+      <button onClick={handleLogout}>Logout</button>
     </Card>
   );
 }
