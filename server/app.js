@@ -8,6 +8,8 @@ var config = require('./config/config.json');
 const { Sequelize } = require('sequelize');
 require("dotenv-safe").config();
 var jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 var sequelize = new Sequelize(config.development.database, config.development.username, config.development.password, {
   host: config.development.host,
@@ -62,20 +64,24 @@ app.get('/', function (req, res) {
 //authentication
 app.post('/login', jsonParser, async (req, res, next) => {
   //esse teste abaixo deve ser feito no seu banco de dados
+  var email = req.body.email;
+  var password = req.body.pwd;
+
   const user = await User.findOne({
-    where: { email: req.body.email, pwd: req.body.pwd }
+    where: { email: req.body.email }
   });
 
-  if(user){
-    //auth ok
-    const id = 1; //esse id viria do banco de dados
-    var token = jwt.sign({ id }, process.env.SECRET, {
-      expiresIn: 300 // expires in 5min
-    });
-    return res.json({ auth: true, token: token });
-  }
-  
-  res.status(500).json({message: 'Login inválido!'});
+  bcrypt.compare(password, user.pwd, function(err, result) {
+    if(result){
+      //auth ok
+      const id = 1; //esse id viria do banco de dados
+      var token = jwt.sign({ id }, process.env.SECRET, {
+        expiresIn: 6000 // expires in 5min
+      });
+      return res.json({ auth: true, token: token });
+    }
+    res.status(500).json({message: 'Login inválido!'});
+  });  
 });
 
 app.post('/logout', function(req, res) {
@@ -98,8 +104,17 @@ app.get('/user/:id', function (req, res) {
 });
 
 app.post('/user', jsonParser, async function (req, res) {
-  var user = User.build(req.body);
-  await user.save();
+
+  var novoUsuario = req.body;
+  var password = novoUsuario.pwd;
+
+  bcrypt.hash(password, saltRounds, async function(err, hash) {
+    // Store hash in your password DB.
+    novoUsuario.pwd = hash;
+    var user = User.build(novoUsuario);
+    await user.save();
+  }); 
+
   res.send("User insert success");
 });
 
