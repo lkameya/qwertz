@@ -11,7 +11,7 @@ function EditUsuario() {
 
   useEffect(() => {
     // GET user/id
-    Axios.get(`http://localhost:5000/user/${id}`)
+    Axios.get(`${process.env.REACT_APP_API_ENDPOINT}/user/${id}`)
               .then(res => {
                 setUser(res.data);
         });
@@ -27,7 +27,7 @@ function EditUsuario() {
       email: user.email || ''
     },
     onSubmit: async (values) => {
-      await Axios.put(`http://localhost:5000/user/${values.id}`, values);
+      await Axios.put(`${process.env.REACT_APP_API_ENDPOINT}/${values.id}`, values);
     },
   });
 
@@ -51,7 +51,7 @@ function EditUsuario() {
   //     }
   //   }
   //   else{
-  //     await axios.post('http://localhost:5000/user', values);
+  //     await axios.post('https://still-atoll-62245.herokuapp.com/user', values);
   //     // await axios.post('https://dry-atoll-57308.herokuapp.com/user', values);
   //     setUsers([...users, values]);
   //   }

@@ -3,7 +3,7 @@
     "username": "lkameya",
     "password": null,
     "database": "qwertz",
-    "host": "127.0.0.1",
+    "host": "localhost",
     "dialect": "postgres"
   },
   "production": {

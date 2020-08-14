@@ -5,13 +5,13 @@ import styled from 'styled-components';
 
 const Card = styled.div`
   padding: 50px;
-  background-color: #ccc;
+  /* background-color: #ccc; */
 `;
 
 const Container = styled.div`
   padding: 20px;
   box-shadow: 0px 2px 10px 4px rgba(0, 0, 0, 0.2);
-  background-color: white;
+  background-color: ${props => props.theme.colors.blue};
   
   div {
     display: inline-block;
@@ -52,12 +52,12 @@ const Actions = styled.div`
 `;
 
 
-function ListaUsuarios() {
+function ListaUsuarios(props) {
 
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    Axios.get('http://localhost:5000/users', {
+    Axios.get(`${process.env.REACT_APP_API_ENDPOINT}/users`, {
       headers: {"x-access-token" : `${localStorage.getItem("token")}`}
     })
               .then(res => {
@@ -66,7 +66,7 @@ function ListaUsuarios() {
   }, []);
 
   const handleLogout = () => {
-    Axios.post('http://localhost:5000/logout')
+    Axios.post(`${process.env.REACT_APP_API_ENDPOINT}/logout`)
         .then(res => {
           localStorage.setItem("token", null);
     });
@@ -74,7 +74,7 @@ function ListaUsuarios() {
 
   return (
     <Card>
-      <Container>
+      <Container {...props}>
         <Header>
           <div>First Name</div>
           <div>Last Name</div>

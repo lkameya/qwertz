@@ -11,16 +11,40 @@ var jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
-var sequelize = new Sequelize(config.development.database, config.development.username, config.development.password, {
-  host: config.development.host,
-  dialect: 'postgres',
-});
+app.use(cors());
+// Add headers
 
-// var sequelize = new Sequelize(config.production.use_env_variable);
+// app.use(function (req, res, next) {
+
+//   // Website you wish to allow to connect
+//   res.setHeader('Access-Control-Allow-Origin', 'https://dry-atoll-57308.herokuapp.com');
+
+//   // Request methods you wish to allow
+//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+//   // Request headers you wish to allow
+//   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+//   // Set to true if you need the website to include cookies in the requests sent
+//   // to the API (e.g. in case you use sessions)
+//   res.setHeader('Access-Control-Allow-Credentials', true);
+
+//   // Pass to next layer of middleware
+//   next();
+// });
+
+// var sequelize = new Sequelize(config.development.database, config.development.username, config.development.password, {
+//   host: config.development.host,
+//   dialect: 'postgres',
+//   port: 5432,
+// });
+
+var sequelize = new Sequelize('postgres://lkameya@localhost:5432/qwertz');
 
 sequelize
   .authenticate()
   .then(function(err) {
+
     console.log('Connection has been established successfully.');
   })
   .catch(function (err) {
@@ -42,7 +66,6 @@ var User = sequelize.define('User', {
     }
   });
 
-app.use(cors());
 
 function verifyJWT(req, res, next){
   var token = req.headers['x-access-token'];
@@ -67,11 +90,16 @@ app.post('/login', jsonParser, async (req, res, next) => {
   var email = req.body.email;
   var password = req.body.pwd;
 
+  console.log('ESTOU NO LOGIN');
+
   const user = await User.findOne({
     where: { email: req.body.email }
   });
 
+  console.log(user);
+
   bcrypt.compare(password, user.pwd, function(err, result) {
+    console.log('ESTOU NO bcrypt');
     if(result){
       //auth ok
       const id = 1; //esse id viria do banco de dados
@@ -80,7 +108,7 @@ app.post('/login', jsonParser, async (req, res, next) => {
       });
       return res.json({ auth: true, token: token });
     }
-    res.status(500).json({message: 'Login inválido!'});
+    return res.status(500).json({message: 'Login inválido!'});
   });  
 });
 

@@ -26,7 +26,7 @@ function AddUsuario() {
     onSubmit: async (values) => {
 
       try {
-        await axios.post('http://localhost:5000/user', values);
+        await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/user`, values);
         addNotification('Usuário inserido com sucesso', 'success');
       } catch(error) {
         addNotification('Erro ao inserir usuario', 'error');
@@ -59,7 +59,7 @@ function AddUsuario() {
   //     }
   //   }
   //   else{
-  //     await axios.post('http://localhost:5000/user', values);
+  //     await axios.post('https://still-atoll-62245.herokuapp.com/user', values);
   //     // await axios.post('https://dry-atoll-57308.herokuapp.com/user', values);
   //     setUsers([...users, values]);
   //   }
