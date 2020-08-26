@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   BrowserRouter as Router,
 
   Route, Switch, useHistory
 } from "react-router-dom";
-import socketIOClient from "socket.io-client";
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import AddUsuario from './components/AddUsuario';
 import DeleteUsuario from './components/DeleteUsuario';
@@ -15,7 +14,6 @@ import Login from './components/Login';
 import NotificationProvider from './components/Notification/NotificationProvider';
 import Layout from './components/Shared/Layout';
 import theme from './styles/theme';
-const ENDPOINT = "http://127.0.0.1:5000";
 
 const GlobalStyle = createGlobalStyle`
 
@@ -47,19 +45,8 @@ const PublicRoute = (props) => {
 };
 
 function App() {
-
-  const [response, setResponse] = useState("");
-
-  useEffect(() => {
-    const socket = socketIOClient(ENDPOINT);
-    socket.on("FromAPI", data => {
-      setResponse(data);
-    });
-  }, []);
-
   return (
     <ThemeProvider theme={theme}>
-      {response}
       <Router>
         <GlobalStyle />
         <NotificationProvider>

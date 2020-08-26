@@ -33,13 +33,14 @@ app.use(cors());
 //   next();
 // });
 
-// var sequelize = new Sequelize(config.development.database, config.development.username, config.development.password, {
-//   host: config.development.host,
-//   dialect: 'postgres',
-//   port: 5432,
-// });
+var sequelize = new Sequelize(config.development.database, config.development.username, config.development.password, {
+  host: config.development.host,
+  dialect: 'postgres',
+  port: 5432,
+});
 
-var sequelize = new Sequelize('postgres://lkameya@localhost:5432/qwertz');
+// var sequelize = new Sequelize('postgres://lkameya@localhost:5432/qwertz');
+// var sequelize = new Sequelize(process.env.DATABASE_URL);
 
 sequelize
   .authenticate()
