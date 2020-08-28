@@ -1,8 +1,8 @@
 import Axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import socketIOClient from "socket.io-client";
 import styled from 'styled-components';
+import useSocket from 'use-socket.io-client';
 
 const Card = styled.div`
   padding: 50px;
@@ -63,6 +63,9 @@ function ListaUsuarios(props) {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
 
+  const [socket] = useSocket(process.env.REACT_APP_API_ENDPOINT);
+  socket.connect();
+
   useEffect(() => {
     Axios.get(`${process.env.REACT_APP_API_ENDPOINT}/users`, {
       headers: {"x-access-token" : `${localStorage.getItem("token")}`}
@@ -73,11 +76,11 @@ function ListaUsuarios(props) {
   },[]);
 
   useEffect(() => {
-    const socket = socketIOClient(process.env.REACT_APP_API_ENDPOINT);
     socket.on("messages", data => {
+      console.log('Nova mensagem');
       setMessages(data);
     }); 
-  }, []);
+  }, [messages]);
 
   const handleLogout = () => {
     Axios.post(`${process.env.REACT_APP_API_ENDPOINT}/logout`)
@@ -89,8 +92,8 @@ function ListaUsuarios(props) {
   const handleChange = e => {
     setNewMessage(e.target.value);
   }
+  
   const handleSubmit = () => {
-    const socket = socketIOClient(process.env.REACT_APP_API_ENDPOINT);
     socket.emit("new-message", newMessage);
   }
 

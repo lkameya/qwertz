@@ -19,6 +19,7 @@
     "react-table": "^7.4.2",
     "socket.io-client": "^2.3.0",
     "styled-components": "^5.1.1",
+    "use-socket.io-client": "^1.1.0",
     "yup": "^0.29.2"
   },
   "scripts": {

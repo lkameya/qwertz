@@ -14,33 +14,33 @@ const saltRounds = 10;
 app.use(cors());
 // Add headers
 
-// app.use(function (req, res, next) {
+app.use(function (req, res, next) {
 
-//   // Website you wish to allow to connect
-//   res.setHeader('Access-Control-Allow-Origin', 'https://dry-atoll-57308.herokuapp.com');
+  // Website you wish to allow to connect
+  res.setHeader('Access-Control-Allow-Origin', 'https://dry-atoll-57308.herokuapp.com');
 
-//   // Request methods you wish to allow
-//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  // Request methods you wish to allow
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
 
-//   // Request headers you wish to allow
-//   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+  // Request headers you wish to allow
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
 
-//   // Set to true if you need the website to include cookies in the requests sent
-//   // to the API (e.g. in case you use sessions)
-//   res.setHeader('Access-Control-Allow-Credentials', true);
+  // Set to true if you need the website to include cookies in the requests sent
+  // to the API (e.g. in case you use sessions)
+  res.setHeader('Access-Control-Allow-Credentials', true);
 
-//   // Pass to next layer of middleware
-//   next();
-// });
-
-var sequelize = new Sequelize(config.development.database, config.development.username, config.development.password, {
-  host: config.development.host,
-  dialect: 'postgres',
-  port: 5432,
+  // Pass to next layer of middleware
+  next();
 });
 
+// var sequelize = new Sequelize(config.development.database, config.development.username, config.development.password, {
+//   host: config.development.host,
+//   dialect: 'postgres',
+//   port: 5432,
+// });
+
 // var sequelize = new Sequelize('postgres://lkameya@localhost:5432/qwertz');
-// var sequelize = new Sequelize(process.env.DATABASE_URL);
+var sequelize = new Sequelize(process.env.DATABASE_URL);
 
 sequelize
   .authenticate()

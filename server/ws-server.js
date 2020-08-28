@@ -16,19 +16,16 @@ const messages = [
 
 io.on("connection", (socket) => {
   console.log("New client connected");
-  if (interval) {
-    clearInterval(interval);
-  }
-  interval = setInterval(() => socket.emit('messages', messages), 1000);
+
   socket.on("disconnect", () => {
     console.log("Client disconnected");
-    clearInterval(interval);
   });
 
   socket.on('new-message', (msg) => {
     console.log('message: ' + msg);
     messages.push({ text: msg});
     socket.emit('messages', messages);
+    socket.broadcast.emit('messages', messages);
   });
 
   socket.emit('messages', messages);
