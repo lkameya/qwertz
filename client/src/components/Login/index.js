@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useFormik } from 'formik';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Wrap = styled.div`
@@ -10,7 +10,10 @@ const Wrap = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(210deg, rgba(2,0,36,1) 0%, rgba(82,9,106,1) 43%, rgba(0,212,255,1) 100%);
+  background: #4568DC;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #B06AB3, #4568DC);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #B06AB3, #4568DC); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
 
 `;
 
@@ -28,6 +31,10 @@ const Container = styled.div`
     flex-direction: column;
     padding: 50px;
 
+    @media (max-width: 400px) {
+      padding: 10px;
+    }
+
     label {
       margin-bottom: 10px;
       margin-top: 10px;
@@ -37,7 +44,7 @@ const Container = styled.div`
       outline: none;
       border: 1px solid #ccc;
       border-radius: 5px;
-      width: 300px;
+      width: 100%;
       height: 40px;
       background-color: white;
       outline: none;
@@ -53,7 +60,7 @@ const Container = styled.div`
       border-radius: 50px;
       padding: 10px 0;
       cursor: pointer;
-      width: 300px;
+      width: 100%;
       height: 40px;
       margin-top: 50px;
       margin-bottom: 50px;
@@ -93,7 +100,7 @@ function Login() {
           <label>Password</label>
           <input type="password" name="pwd" onChange={formik.handleChange}/>
           <button type="submit">Login</button>
-          <div>Don't have an account? <a href="/add-usuario">Sign up</a></div>
+          <div>Don't have an account? <Link to="/add-usuario">Sign up</Link></div>
           {/* <div>{errors}</div> */}
         </form>
       </Container>

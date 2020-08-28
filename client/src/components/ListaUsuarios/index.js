@@ -63,13 +63,6 @@ function ListaUsuarios(props) {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
 
-  const socket = socketIOClient(process.env.REACT_APP_API_ENDPOINT);
-
-  function subscribeToMessages(cb) {
-    socket.on('messages', messages => cb(null, messages));
-    socket.emit('subscribeToMessages', 1000);
-  }
-
   useEffect(() => {
     Axios.get(`${process.env.REACT_APP_API_ENDPOINT}/users`, {
       headers: {"x-access-token" : `${localStorage.getItem("token")}`}
@@ -77,15 +70,13 @@ function ListaUsuarios(props) {
       .then(res => {
         setUsers(res.data);
     });
+  },[]);
 
+  useEffect(() => {
+    const socket = socketIOClient(process.env.REACT_APP_API_ENDPOINT);
     socket.on("messages", data => {
       setMessages(data);
-    });
-
-    subscribeToMessages((err, messages) => {
-      console.log(messages);
-      setMessages(messages)});
-    
+    }); 
   }, []);
 
   const handleLogout = () => {

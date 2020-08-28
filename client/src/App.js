@@ -2,7 +2,7 @@ import React from 'react';
 import {
   BrowserRouter as Router,
 
-  Route, Switch, useHistory
+  Redirect, Route, Switch
 } from "react-router-dom";
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import AddUsuario from './components/AddUsuario';
@@ -28,20 +28,21 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
-const PrivateRoute = (props) => {
-  const history = useHistory();
+const PrivateRoute = ({component: Component, ...rest}) => {
+  console.log("Private route");
 
-  if(localStorage.getItem("token"))
-    return <Route {...props}/>;
-
-  console.log("PRIVATE ROUTE");
-  history.push("/login");
-
-  return null;
-};
-
-const PublicRoute = (props) => {
-  return <Route {...props}/>;
+  return (
+    <Route
+    {...rest}
+      render={props =>
+        !!localStorage.getItem("token") ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to="/login" />
+        )
+    }
+  />
+  )
 };
 
 function App() {
@@ -53,11 +54,11 @@ function App() {
         <Switch>
           <Route path="/login" exact component={Login}/>
           <Layout>
+            <Route path="/add-usuario" exact component={AddUsuario}/>
+            <PrivateRoute path="/home" exact component={Home}/>
+            <PrivateRoute path="/edit-usuario/:id" exact component={EditUsuario}/>
+            <PrivateRoute path="/delete-usuario/:id" exact component={DeleteUsuario}/>
             <PrivateRoute path="/" exact component={ListaUsuarios}/>
-            <PublicRoute path="/add-usuario" component={AddUsuario}/>
-            <PublicRoute path="/home" exact component={Home}/>
-            <PublicRoute path="/edit-usuario/:id" component={EditUsuario}/>
-            <PublicRoute path="/delete-usuario/:id" component={DeleteUsuario}/>
           </Layout>
           </Switch>
         </NotificationProvider>
